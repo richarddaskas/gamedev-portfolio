@@ -1,434 +1,487 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+
 export default function Home() {
+  const [activeSection, setActiveSection] = useState('about');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['about', 'experience', 'projects'];
+      
+      // Get viewport and document dimensions
+      const scrollPosition = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      
+      // If we're near the bottom of the page, always show Projects as active
+      if (scrollPosition + windowHeight >= documentHeight - 100) {
+        setActiveSection('projects');
+        return;
+      }
+      
+      // Otherwise, find which section we're in
+      const viewportMiddle = scrollPosition + windowHeight / 2;
+      
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = sections[i];
+        const element = document.getElementById(section);
+        if (element) {
+          const { offsetTop } = element;
+          if (viewportMiddle >= offsetTop) {
+            setActiveSection(section);
+            return;
+          }
+        }
+      }
+    };
+
+    handleScroll(); // Run once on mount
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-stone-50">
-      {/* Minimal top bar */}
-      <div className="bg-primary-600 text-white py-2 px-4 text-center text-sm font-medium">
-        Texas-Based Property Management • Direct: (512) 555-0100
-      </div>
-
-      {/* Header - Side navigation style */}
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-          <div className="flex items-center justify-between h-24">
-            {/* Logo - minimal */}
-            <div className="flex items-center gap-3">
-              <div className="w-3 h-12 bg-gradient-to-b from-primary-500 to-primary-700"></div>
-              <div>
-                <div className="text-2xl font-bold tracking-tight" style={{fontFamily: 'var(--font-display)'}}>KASWELL</div>
-                <div className="text-xs text-gray-500 font-medium tracking-widest uppercase">Property Management</div>
-              </div>
-            </div>
-
-            {/* Navigation - horizontal pills */}
-            <div className="hidden lg:flex items-center gap-2">
-              <a href="#services" className="px-6 py-2.5 text-gray-700 hover:bg-gray-100 rounded-full transition font-medium">Services</a>
-              <a href="#about" className="px-6 py-2.5 text-gray-700 hover:bg-gray-100 rounded-full transition font-medium">About</a>
-              <a href="#reviews" className="px-6 py-2.5 text-gray-700 hover:bg-gray-100 rounded-full transition font-medium">Reviews</a>
-              <a href="#contact" className="px-8 py-2.5 bg-primary-600 text-white rounded-full font-semibold hover:bg-primary-700 transition ml-4">
-                Get Started
-              </a>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      {/* Hero - Split screen design */}
-      <section className="relative bg-white">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="grid lg:grid-cols-2 gap-0 min-h-[600px]">
-            {/* Left - Content */}
-            <div className="px-6 lg:px-12 py-16 lg:py-24 flex flex-col justify-center">
-              <div className="inline-block px-4 py-1.5 bg-primary-50 text-primary-700 rounded-full text-sm font-semibold mb-6 w-fit">
-                Family Owned Since 2019
-              </div>
-              
-              <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-[1.1]" style={{fontFamily: 'var(--font-display)'}}>
-                Property<br/>
-                Management<br/>
-                <span className="text-primary-600">Done Right</span>
+    <div className="min-h-screen bg-theme-primary text-theme-secondary">
+      <div className="mx-auto max-w-screen-xl px-6 py-12 md:px-12 md:py-20 lg:px-24 lg:py-0">
+        <div className="lg:flex lg:justify-between lg:gap-4">
+          
+          {/* LEFT COLUMN - Static */}
+          <header className="lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-1/2 lg:flex-col lg:justify-between lg:py-24">
+            <div>
+              <h1 className="text-4xl font-bold tracking-tight text-theme-primary sm:text-5xl">
+                Richard Daskas
               </h1>
-              
-              <p className="text-xl text-gray-600 mb-10 max-w-lg leading-relaxed">
-                We manage our own properties across Texas, so we know what matters. Transparent pricing, honest service, real results.
-              </p>
-
-              <div className="flex flex-wrap gap-4">
-                <a href="#contact" className="px-8 py-4 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition inline-flex items-center gap-2">
-                  Schedule Consultation
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </a>
-                <a href="#about" className="px-8 py-4 border-2 border-gray-900 text-gray-900 font-semibold rounded-lg hover:bg-gray-900 hover:text-white transition">
-                  Learn More
-                </a>
-              </div>
-            </div>
-
-            {/* Right - Image */}
-            <div className="relative h-[400px] lg:h-auto">
-              <img 
-                src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80" 
-                alt="Texas property"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-transparent to-transparent"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats bar */}
-      <section className="bg-dark-800 text-white py-12">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-8">
-            <div>
-              <div className="text-4xl font-bold mb-1" style={{fontFamily: 'var(--font-display)'}}>5+</div>
-              <div className="text-gray-400 text-sm uppercase tracking-wider">Years Experience</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-1" style={{fontFamily: 'var(--font-display)'}}>24/7</div>
-              <div className="text-gray-400 text-sm uppercase tracking-wider">Support</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-1" style={{fontFamily: 'var(--font-display)'}}>100%</div>
-              <div className="text-gray-400 text-sm uppercase tracking-wider">Satisfaction</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Services - Card grid with offset */}
-      <section id="services" className="py-24 bg-stone-50">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-          <div className="mb-16">
-            <div className="text-sm font-semibold text-primary-600 mb-3 uppercase tracking-wider">Our Services</div>
-            <h2 className="text-4xl lg:text-5xl font-bold mb-4" style={{fontFamily: 'var(--font-display)'}}>
-              Everything You Need
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl">
-              Full-service property management designed for owners who value their time and investment.
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-3 gap-6">
-            {/* Service 1 */}
-            <div className="bg-white p-8 border-l-4 border-primary-600 hover:shadow-lg transition group">
-              <div className="w-14 h-14 bg-primary-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-primary-600 transition">
-                <svg className="w-7 h-7 text-primary-600 group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="text-2xl font-bold mb-4" style={{fontFamily: 'var(--font-display)'}}>Tenant Screening</h3>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                Comprehensive background checks, credit reports, and reference verification to find reliable, long-term tenants.
-              </p>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li className="flex items-start gap-2">
-                  <span className="text-primary-600 mt-0.5">→</span>
-                  <span>Full background checks</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary-600 mt-0.5">→</span>
-                  <span>Employment verification</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary-600 mt-0.5">→</span>
-                  <span>Landlord references</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Service 2 */}
-            <div className="bg-white p-8 border-l-4 border-gray-900 hover:shadow-lg transition group">
-              <div className="w-14 h-14 bg-gray-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-gray-900 transition">
-                <svg className="w-7 h-7 text-gray-900 group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="text-2xl font-bold mb-4" style={{fontFamily: 'var(--font-display)'}}>Rent Collection</h3>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                Automated systems and personal follow-up ensure consistent cash flow with detailed monthly statements.
-              </p>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li className="flex items-start gap-2">
-                  <span className="text-gray-900 mt-0.5">→</span>
-                  <span>Online payment portal</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-gray-900 mt-0.5">→</span>
-                  <span>Monthly reporting</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-gray-900 mt-0.5">→</span>
-                  <span>Direct deposits</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Service 3 */}
-            <div className="bg-white p-8 border-l-4 border-primary-600 hover:shadow-lg transition group">
-              <div className="w-14 h-14 bg-primary-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-primary-600 transition">
-                <svg className="w-7 h-7 text-primary-600 group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                </svg>
-              </div>
-              <h3 className="text-2xl font-bold mb-4" style={{fontFamily: 'var(--font-display)'}}>Maintenance</h3>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                24/7 emergency support with vetted local contractors. We handle everything from routine to urgent repairs.
-              </p>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li className="flex items-start gap-2">
-                  <span className="text-primary-600 mt-0.5">→</span>
-                  <span>Emergency hotline</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary-600 mt-0.5">→</span>
-                  <span>Licensed contractors</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary-600 mt-0.5">→</span>
-                  <span>Regular inspections</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* About - Image/text side by side alternate */}
-      <section id="about" className="py-24 bg-white">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="order-2 lg:order-1">
-              <img 
-                src="https://images.unsplash.com/photo-1560520031-3a4dc4e9de0c?w=800&q=80" 
-                alt="Property management"
-                className="w-full aspect-[4/3] object-cover"
-              />
-            </div>
-
-            <div className="order-1 lg:order-2">
-              <div className="text-sm font-semibold text-primary-600 mb-3 uppercase tracking-wider">Our Story</div>
-              <h2 className="text-4xl lg:text-5xl font-bold mb-6" style={{fontFamily: 'var(--font-display)'}}>
-                Property Owners<br/>
-                First, Managers Second
+              <h2 className="mt-3 text-lg font-medium tracking-tight text-theme-primary sm:text-xl">
+                Full-Stack Web Developer
               </h2>
-              <div className="space-y-4 text-gray-600 leading-relaxed">
-                <p className="text-lg">
-                  We started managing properties because we owned them ourselves. Five years ago, we bought our first rental and quickly learned what worked—and what didn't.
-                </p>
-                <p className="text-lg">
-                  Today we manage 3 properties across Texas and help other owners navigate the same challenges we faced. No corporate playbook, just honest service from people who understand.
-                </p>
-              </div>
+              <p className="mt-4 max-w-xs leading-normal text-theme-muted">
+                Building responsive, modern web applications with React, Node.js, and Tailwind CSS.
+              </p>
 
-              <div className="mt-10 space-y-4">
-                <div className="flex items-start gap-4">
-                  <div className="w-1 h-20 bg-primary-600 mt-1"></div>
-                  <div>
-                    <div className="font-bold text-gray-900 mb-1">Direct Access</div>
-                    <p className="text-gray-600">Call or text us directly—no phone trees or voicemail.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-1 h-20 bg-primary-600 mt-1"></div>
-                  <div>
-                    <div className="font-bold text-gray-900 mb-1">Monthly Visits</div>
-                    <p className="text-gray-600">We personally inspect every property we manage each month.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-1 h-20 bg-primary-600 mt-1"></div>
-                  <div>
-                    <div className="font-bold text-gray-900 mb-1">Full Transparency</div>
-                    <p className="text-gray-600">Clear reporting and open communication, always.</p>
-                  </div>
-                </div>
-              </div>
+              {/* Navigation */}
+              <nav className="nav hidden lg:block mt-16" aria-label="In-page jump links">
+                <ul className="w-max">
+                  <li>
+                    <a
+                      href="#about"
+                      onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}
+                      className={`group flex items-center py-3 ${
+                        activeSection === 'about' ? 'active' : ''
+                      }`}
+                    >
+                      <span className={`nav-indicator mr-4 h-1.5 w-1.5 rounded-full transition-all ${
+                        activeSection === 'about' 
+                          ? 'w-8 bg-theme-accent' 
+                          : 'bg-slate-400 group-hover:w-8 group-hover:bg-theme-accent'
+                      }`}></span>
+                      <span className={`nav-text text-xs font-bold uppercase tracking-widest ${
+                        activeSection === 'about'
+                          ? 'text-theme-primary'
+                          : 'text-theme-subtle group-hover:text-theme-primary'
+                      }`}>
+                        About
+                      </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#experience"
+                      onClick={(e) => { e.preventDefault(); scrollToSection('experience'); }}
+                      className={`group flex items-center py-3 ${
+                        activeSection === 'experience' ? 'active' : ''
+                      }`}
+                    >
+                      <span className={`nav-indicator mr-4 h-1.5 w-1.5 rounded-full transition-all ${
+                        activeSection === 'experience' 
+                          ? 'w-8 bg-theme-accent' 
+                          : 'bg-slate-400 group-hover:w-8 group-hover:bg-theme-accent'
+                      }`}></span>
+                      <span className={`nav-text text-xs font-bold uppercase tracking-widest ${
+                        activeSection === 'experience'
+                          ? 'text-theme-primary'
+                          : 'text-theme-subtle group-hover:text-theme-primary'
+                      }`}>
+                        Experience
+                      </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#projects"
+                      onClick={(e) => { e.preventDefault(); scrollToSection('projects'); }}
+                      className={`group flex items-center py-3 ${
+                        activeSection === 'projects' ? 'active' : ''
+                      }`}
+                    >
+                      <span className={`nav-indicator mr-4 h-1.5 w-1.5 rounded-full transition-all ${
+                        activeSection === 'projects' 
+                          ? 'w-8 bg-theme-accent' 
+                          : 'bg-slate-400 group-hover:w-8 group-hover:bg-theme-accent'
+                      }`}></span>
+                      <span className={`nav-text text-xs font-bold uppercase tracking-widest ${
+                        activeSection === 'projects'
+                          ? 'text-theme-primary'
+                          : 'text-theme-subtle group-hover:text-theme-primary'
+                      }`}>
+                        Projects
+                      </span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Testimonials - Minimal cards */}
-      <section id="reviews" className="py-24 bg-stone-50">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-          <div className="mb-16 text-center">
-            <div className="text-sm font-semibold text-primary-600 mb-3 uppercase tracking-wider">Client Reviews</div>
-            <h2 className="text-4xl lg:text-5xl font-bold" style={{fontFamily: 'var(--font-display)'}}>
-              What Owners Say
-            </h2>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <div className="bg-white p-10 border-l-4 border-primary-600">
-              <div className="flex gap-1 mb-6">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            {/* Social Links */}
+            <ul className="ml-1 mt-8 flex items-center gap-5" aria-label="Social media">
+              <li className="text-xs">
+                <a
+                  className="block hover:text-theme-primary"
+                  href="https://github.com/yourusername"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <span className="sr-only">GitHub</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-6 w-6" aria-hidden="true">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
                   </svg>
-                ))}
-              </div>
-              <p className="text-gray-700 text-lg leading-relaxed mb-6 italic">
-                "I was hesitant to trust anyone with my property, but Kaswell proved me wrong. They handle everything professionally and keep me informed. Best decision I made."
-              </p>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold">
-                  MJ
-                </div>
-                <div>
-                  <div className="font-bold text-gray-900">Michael J.</div>
-                  <div className="text-sm text-gray-600">Single-Family Home</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white p-10 border-l-4 border-gray-900">
-              <div className="flex gap-1 mb-6">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </a>
+              </li>
+              <li className="text-xs">
+                <a
+                  className="block hover:text-theme-primary"
+                  href="https://linkedin.com/in/richard-d-03128838b"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <span className="sr-only">LinkedIn</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6" aria-hidden="true">
+                    <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"></path>
                   </svg>
-                ))}
-              </div>
-              <p className="text-gray-700 text-lg leading-relaxed mb-6 italic">
-                "Their responsiveness is incredible. When my AC went out in July, they had someone there within hours. That's the kind of service that keeps tenants happy."
-              </p>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gray-900 rounded-full flex items-center justify-center text-white font-bold">
-                  DW
-                </div>
-                <div>
-                  <div className="font-bold text-gray-900">David W.</div>
-                  <div className="text-sm text-gray-600">Condo Owner</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+                </a>
+              </li>
+            </ul>
+          </header>
 
-      {/* CTA Section */}
-      <section id="contact" className="py-24 bg-dark-700 text-white">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-4xl lg:text-6xl font-bold mb-6" style={{fontFamily: 'var(--font-display)'}}>
-              Ready to Get Started?
-            </h2>
-            <p className="text-xl text-gray-300">
-              Schedule a free consultation to discuss your property and learn how we can help.
-            </p>
-          </div>
-
-          <form className="max-w-2xl mx-auto space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-semibold mb-2 uppercase tracking-wider text-gray-400">Name</label>
-                <input 
-                  type="text" 
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500 transition"
-                  placeholder="Your name"
-                />
+          {/* RIGHT COLUMN - Scrollable */}
+          <main className="pt-24 lg:w-1/2 lg:py-24">
+            
+            {/* ABOUT SECTION */}
+            <section id="about" className="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24">
+              <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-theme-primary/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
+                <h2 className="text-sm font-bold uppercase tracking-widest text-theme-primary lg:sr-only">About</h2>
               </div>
               <div>
-                <label className="block text-sm font-semibold mb-2 uppercase tracking-wider text-gray-400">Email</label>
-                <input 
-                  type="email" 
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500 transition"
-                  placeholder="your@email.com"
-                />
+                <p className="mb-4 text-theme-muted leading-relaxed">
+                  I'm a developer with 10+ years of technical experience building complex systems. 
+                  I recently transitioned into web development after shipping a commercial game and 
+                  working at IBM Research on AI-driven platforms.
+                </p>
+                <p className="mb-4 text-theme-muted leading-relaxed">
+                  My background in C# and systems architecture gives me a strong foundation for 
+                  building scalable, maintainable web applications. I'm drawn to projects that 
+                  combine technical challenges with creative problem-solving.
+                </p>
+                <p className="text-theme-muted leading-relaxed">
+                  When I'm not coding, you can find me composing music, working on game prototypes, 
+                  or exploring new technologies.
+                </p>
               </div>
-            </div>
+            </section>
 
-            <div>
-              <label className="block text-sm font-semibold mb-2 uppercase tracking-wider text-gray-400">Phone</label>
-              <input 
-                type="tel" 
-                className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500 transition"
-                placeholder="(555) 123-4567"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold mb-2 uppercase tracking-wider text-gray-400">Property Address</label>
-              <input 
-                type="text" 
-                className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500 transition"
-                placeholder="123 Main St, Dallas, TX"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold mb-2 uppercase tracking-wider text-gray-400">Message</label>
-              <textarea 
-                rows="4" 
-                className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500 transition resize-none"
-                placeholder="Tell us about your property..."
-              ></textarea>
-            </div>
-
-            <button 
-              type="submit" 
-              className="w-full px-8 py-4 bg-primary-600 text-white font-semibold hover:bg-primary-700 transition"
-            >
-              Send Message
-            </button>
-
-            <p className="text-center text-sm text-gray-400">
-              We typically respond within 2-3 hours during business hours
-            </p>
-          </form>
-        </div>
-      </section>
-
-      {/* Footer - Minimal */}
-      <footer className="bg-dark-900 text-white py-16">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-          <div className="grid md:grid-cols-4 gap-12 mb-12">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-1 h-8 bg-primary-600"></div>
-                <span className="text-xl font-bold" style={{fontFamily: 'var(--font-display)'}}>KASWELL</span>
+            {/* EXPERIENCE SECTION */}
+            <section id="experience" className="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24">
+              <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-theme-primary/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
+                <h2 className="text-sm font-bold uppercase tracking-widest text-theme-primary lg:sr-only">Experience</h2>
               </div>
-              <p className="text-gray-400 text-sm">
-                Family-owned property management in Texas.
+              <div>
+                <ol className="group/list">
+
+                  {/* Experience Item 1 - Freelance Web Developer */}
+                  <li className="mb-12">
+                    <div className="group relative grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50">
+                      <div className="absolute -inset-x-4 -inset-y-4 z-0 hidden rounded-md transition motion-reduce:transition-none lg:-inset-x-6 lg:block lg:group-hover:bg-theme-hover lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
+                      <header className="z-10 mb-2 mt-1 text-xs font-semibold uppercase tracking-wide text-theme-subtle sm:col-span-2" aria-label="2021 to Present">
+                        2021 — Present
+                      </header>
+                      <div className="z-10 sm:col-span-6">
+                        <h3 className="font-medium leading-snug text-theme-primary">
+                          <div>
+                            <a className="inline-flex items-baseline font-medium leading-tight text-theme-primary hover:text-theme-accent focus-visible:text-theme-accent group/link text-base" href="#" aria-label="Freelance Web Developer">
+                              <span className="absolute -inset-x-4 -inset-y-2.5 hidden rounded md:-inset-x-6 md:-inset-y-4 lg:block"></span>
+                              <span>Freelance Web Developer · <span className="inline-block">Self-Employed</span></span>
+                            </a>
+                          </div>
+                        </h3>
+                        <p className="mt-2 text-sm leading-normal text-theme-muted">
+                          Building responsive websites and web applications for clients. Creating custom 
+                          solutions using modern frameworks and tools, focusing on clean code and user 
+                          experience.
+                        </p>
+                        <ul className="mt-2 flex flex-wrap" aria-label="Technologies used">
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">React</div>
+                          </li>
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">Next.js</div>
+                          </li>
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">Tailwind CSS</div>
+                          </li>
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">Node.js</div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </li>
+
+                  {/* Experience Item 2 - Game Developer */}
+                  <li className="mb-12">
+                    <div className="group relative grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50">
+                      <div className="absolute -inset-x-4 -inset-y-4 z-0 hidden rounded-md transition motion-reduce:transition-none lg:-inset-x-6 lg:block lg:group-hover:bg-theme-hover lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
+                      <header className="z-10 mb-2 mt-1 text-xs font-semibold uppercase tracking-wide text-theme-subtle sm:col-span-2" aria-label="2018 to Present">
+                        2018 — Present
+                      </header>
+                      <div className="z-10 sm:col-span-6">
+                        <h3 className="font-medium leading-snug text-theme-primary">
+                          <div>
+                            <a className="inline-flex items-baseline font-medium leading-tight text-theme-primary hover:text-theme-accent focus-visible:text-theme-accent group/link text-base" href="#" aria-label="Game Developer & Systems Designer">
+                              <span className="absolute -inset-x-4 -inset-y-2.5 hidden rounded md:-inset-x-6 md:-inset-y-4 lg:block"></span>
+                              <span>Game Developer & Systems Designer · <span className="inline-block">Independent</span></span>
+                            </a>
+                          </div>
+                        </h3>
+                        <p className="mt-2 text-sm leading-normal text-theme-muted">
+                          Designed and developed complete game systems from concept to implementation. 
+                          Built custom physics engines, state management systems, and interactive gameplay 
+                          mechanics using Unity and C#. Shipped commercial title on Steam.
+                        </p>
+                        <ul className="mt-2 flex flex-wrap" aria-label="Technologies used">
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">Unity</div>
+                          </li>
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">C#</div>
+                          </li>
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">Systems Design</div>
+                          </li>
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">Game Architecture</div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </li>
+
+                  {/* Experience Item 3 - IBM Research */}
+                  <li className="mb-12">
+                    <div className="group relative grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50">
+                      <div className="absolute -inset-x-4 -inset-y-4 z-0 hidden rounded-md transition motion-reduce:transition-none lg:-inset-x-6 lg:block lg:group-hover:bg-theme-hover lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
+                      <header className="z-10 mb-2 mt-1 text-xs font-semibold uppercase tracking-wide text-theme-subtle sm:col-span-2" aria-label="2015 to 2017">
+                        2015 — 2017
+                      </header>
+                      <div className="z-10 sm:col-span-6">
+                        <h3 className="font-medium leading-snug text-theme-primary">
+                          <div>
+                            <a className="inline-flex items-baseline font-medium leading-tight text-theme-primary hover:text-theme-accent focus-visible:text-theme-accent group/link text-base" href="#" aria-label="Software Developer at IBM Research">
+                              <span className="absolute -inset-x-4 -inset-y-2.5 hidden rounded md:-inset-x-6 md:-inset-y-4 lg:block"></span>
+                              <span>Software Developer · <span className="inline-block">IBM Research</span></span>
+                            </a>
+                          </div>
+                        </h3>
+                        <p className="mt-2 text-sm leading-normal text-theme-muted">
+                          Worked on Watson Beat, an AI-driven music generation platform. Implemented 
+                          technical systems for music composition algorithms, handled data processing 
+                          pipelines, and collaborated with research scientists on experimental features.
+                        </p>
+                        <ul className="mt-2 flex flex-wrap" aria-label="Technologies used">
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">Python</div>
+                          </li>
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">AI/ML</div>
+                          </li>
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">Data Processing</div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </li>
+
+                </ol>
+                {/*
+                <div className="mt-12">
+                  <a className="inline-flex items-center font-medium leading-tight text-theme-primary group" aria-label="View Full Resume" href="/resume.pdf">
+                    <span>
+                      <span className="border-b border-transparent pb-px transition group-hover:border-theme-accent motion-reduce:transition-none">View Full </span>
+                      <span className="whitespace-nowrap">
+                        <span className="border-b border-transparent pb-px transition group-hover:border-theme-accent motion-reduce:transition-none">Resume</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="ml-1 inline-block h-4 w-4 shrink-0 -translate-y-px transition-transform group-hover:translate-x-2 group-focus-visible:translate-x-2 motion-reduce:transition-none" aria-hidden="true">
+                          <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd"></path>
+                        </svg>
+                      </span>
+                    </span>
+                  </a>
+                </div>
+                */}
+              </div>
+            </section>
+
+            {/* PROJECTS SECTION */}
+            <section id="projects" className="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24">
+              <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-theme-primary/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
+                <h2 className="text-sm font-bold uppercase tracking-widest text-theme-primary lg:sr-only">Projects</h2>
+              </div>
+              <div>
+                <ul className="group/list">
+
+                  {/* Project 1 - Property Management Platform */}
+                  <li className="mb-12">
+                    <div className="group relative grid gap-4 pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50">
+                      <div className="absolute -inset-x-4 -inset-y-4 z-0 hidden rounded-md transition motion-reduce:transition-none lg:-inset-x-6 lg:block lg:group-hover:bg-theme-hover lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
+                      <div className="z-10 sm:order-2 sm:col-span-6">
+                        <h3>
+                          <a className="inline-flex items-baseline font-medium leading-tight text-theme-primary hover:text-theme-accent focus-visible:text-theme-accent group/link text-base" href="https://property-management-site-three.vercel.app/" target="_blank" rel="noreferrer" aria-label="Property Management Platform">
+                            <span className="absolute -inset-x-4 -inset-y-2.5 hidden rounded md:-inset-x-6 md:-inset-y-4 lg:block"></span>
+                            <span>Property Management Platform
+                              <span className="inline-block">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="inline-block h-4 w-4 shrink-0 transition-transform group-hover/link:-translate-y-1 group-hover/link:translate-x-1 group-focus-visible/link:-translate-y-1 group-focus-visible/link:translate-x-1 motion-reduce:transition-none ml-1 translate-y-px" aria-hidden="true">
+                                  <path fillRule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clipRule="evenodd"></path>
+                                </svg>
+                              </span>
+                            </span>
+                          </a>
+                        </h3>
+                        <p className="mt-2 text-sm leading-normal text-theme-muted">
+                          Full-stack web application for managing rental properties. Features include tenant 
+                          screening, payment processing integration, and automated workflows. Built with modern 
+                          frameworks and deployed on cloud infrastructure.
+                        </p>
+                        <ul className="mt-2 flex flex-wrap" aria-label="Technologies used">
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">React</div>
+                          </li>
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">Node.js</div>
+                          </li>
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">Tailwind CSS</div>
+                          </li>
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">Vercel</div>
+                          </li>
+                        </ul>
+                      </div>
+                      <img alt="Property management platform screenshot" loading="lazy" width="200" height="48" decoding="async" className="rounded border-2 border-theme-primary/10 transition group-hover:border-theme-primary/30 sm:order-1 sm:col-span-2 sm:translate-y-1" style={{color: 'transparent'}} src="/ss_kaswellPropertyManagementSite.png" />
+                    </div>
+                  </li>
+                  
+                  {/* Project 2 - Systems Design Portfolio */}
+                  <li className="mb-12">
+                    <div className="group relative grid gap-4 pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50">
+                      <div className="absolute -inset-x-4 -inset-y-4 z-0 hidden rounded-md transition motion-reduce:transition-none lg:-inset-x-6 lg:block lg:group-hover:bg-theme-hover lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
+                      <div className="z-10 sm:order-2 sm:col-span-6">
+                        <h3>
+                          <a className="inline-flex items-baseline font-medium leading-tight text-theme-primary hover:text-theme-accent focus-visible:text-theme-accent group/link text-base" href="https://systemsdesignportfolio.richarddaskas.com/" target="_blank" rel="noreferrer" aria-label="Systems Design Portfolio">
+                            <span className="absolute -inset-x-4 -inset-y-2.5 hidden rounded md:-inset-x-6 md:-inset-y-4 lg:block"></span>
+                            <span>Systems Design Portfolio
+                              <span className="inline-block">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="inline-block h-4 w-4 shrink-0 transition-transform group-hover/link:-translate-y-1 group-hover/link:translate-x-1 group-focus-visible/link:-translate-y-1 group-focus-visible/link:translate-x-1 motion-reduce:transition-none ml-1 translate-y-px" aria-hidden="true">
+                                  <path fillRule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clipRule="evenodd"></path>
+                                </svg>
+                              </span>
+                            </span>
+                          </a>
+                        </h3>
+                        <p className="mt-2 text-sm leading-normal text-theme-muted">
+                          Interactive portfolio site showcasing game systems design work. Features dynamic 
+                          content sections, responsive design, and modern UI/UX principles. Built to demonstrate 
+                          both technical implementation and design thinking.
+                        </p>
+                        <ul className="mt-2 flex flex-wrap" aria-label="Technologies used">
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">React</div>
+                          </li>
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">Next.js</div>
+                          </li>
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">Tailwind CSS</div>
+                          </li>
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">Vercel</div>
+                          </li>
+                        </ul>
+                      </div>
+                      <img alt="Systems Design Portfolio screenshot" loading="lazy" width="200" height="48" decoding="async" className="rounded border-2 border-theme-primary/10 transition group-hover:border-theme-primary/30 sm:order-1 sm:col-span-2 sm:translate-y-1" style={{color: 'transparent'}} src="/ss_systemDesignSite.png" />
+                    </div>
+                  </li>
+
+                  {/* Project 3 - Client Site */}
+                  <li className="mb-12">
+                    <div className="group relative grid gap-4 pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50">
+                      <div className="absolute -inset-x-4 -inset-y-4 z-0 hidden rounded-md transition motion-reduce:transition-none lg:-inset-x-6 lg:block lg:group-hover:bg-theme-hover lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
+                      <div className="z-10 sm:order-2 sm:col-span-6">
+                        <h3>
+                          <a className="inline-flex items-baseline font-medium leading-tight text-theme-primary hover:text-theme-accent focus-visible:text-theme-accent group/link text-base" href="https://www.grandviewheritagefarms.com/home" target="_blank" rel="noreferrer" aria-label="Client Portfolio Site">
+                            <span className="absolute -inset-x-4 -inset-y-2.5 hidden rounded md:-inset-x-6 md:-inset-y-4 lg:block"></span>
+                            <span>Client Portfolio Site
+                              <span className="inline-block">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="inline-block h-4 w-4 shrink-0 transition-transform group-hover/link:-translate-y-1 group-hover/link:translate-x-1 group-focus-visible/link:-translate-y-1 group-focus-visible/link:translate-x-1 motion-reduce:transition-none ml-1 translate-y-px" aria-hidden="true">
+                                  <path fillRule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clipRule="evenodd"></path>
+                                </svg>
+                              </span>
+                            </span>
+                          </a>
+                        </h3>
+                        <p className="mt-2 text-sm leading-normal text-theme-muted">
+                          Website design and development for local bakery using Wix platform. Configured 
+                          Square payment integration for e-commerce, designed custom layouts, and optimized 
+                          user experience for mobile ordering.
+                        </p>
+                        <ul className="mt-2 flex flex-wrap" aria-label="Technologies used">
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">Wix</div>
+                          </li>
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">Square Payments</div>
+                          </li>
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">UI/UX Design</div>
+                          </li>
+                          <li className="mr-1.5 mt-2">
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">Responsive Design</div>
+                          </li>
+                        </ul>
+                      </div>
+                      <img alt="Client site screenshot" loading="lazy" width="200" height="48" decoding="async" className="rounded border-2 border-theme-primary/10 transition group-hover:border-theme-primary/30 sm:order-1 sm:col-span-2 sm:translate-y-1" style={{color: 'transparent'}} src="/ss_grandViewHeritageFarmsSite.png" />
+                    </div>
+                  </li>
+
+                </ul>
+              </div>
+            </section>
+
+            {/* FOOTER */}
+            <footer className="max-w-md pb-16 text-sm text-theme-subtle sm:pb-0">
+              <p>
+                Built with <a href="https://nextjs.org/" className="font-medium text-theme-muted hover:text-theme-accent focus-visible:text-theme-accent" target="_blank" rel="noreferrer">Next.js</a> and <a href="https://tailwindcss.com/" className="font-medium text-theme-muted hover:text-theme-accent focus-visible:text-theme-accent" target="_blank" rel="noreferrer">Tailwind CSS</a>, deployed with <a href="https://vercel.com/" className="font-medium text-theme-muted hover:text-theme-accent focus-visible:text-theme-accent" target="_blank" rel="noreferrer">Vercel</a>.
               </p>
-            </div>
+            </footer>
 
-            <div>
-              <h4 className="font-bold mb-4 text-sm uppercase tracking-wider">Services</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#services" className="hover:text-white transition">Tenant Screening</a></li>
-                <li><a href="#services" className="hover:text-white transition">Rent Collection</a></li>
-                <li><a href="#services" className="hover:text-white transition">Maintenance</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-bold mb-4 text-sm uppercase tracking-wider">Company</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#about" className="hover:text-white transition">About</a></li>
-                <li><a href="#reviews" className="hover:text-white transition">Reviews</a></li>
-                <li><a href="#contact" className="hover:text-white transition">Contact</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-bold mb-4 text-sm uppercase tracking-wider">Contact</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>Texas</li>
-                <li>(512) 555-0100</li>
-                <li>hello@kaswellpm.com</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2025 Kaswell Property Management. All rights reserved.</p>
-          </div>
+          </main>
         </div>
-      </footer>
+      </div>
     </div>
   );
 }
