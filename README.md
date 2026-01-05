@@ -4,7 +4,7 @@ A modern, responsive portfolio website built with Next.js and Tailwind CSS, feat
 
 ## 🌐 Live Demo
 
-[View Live Site](https://dev.richarddaskas.com/)
+[View Live Site](https://gamedev.richarddaskas.com/)
 
 ## ✨ Features
 
@@ -53,7 +53,7 @@ A modern, responsive portfolio website built with Next.js and Tailwind CSS, feat
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/webdev-portfolio.git
+git clone https://github.com/yourusername/gamedev-portfolio.git
 cd webdev-portfolio
 ```
 
