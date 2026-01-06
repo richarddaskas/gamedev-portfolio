@@ -184,7 +184,8 @@ export default function Home() {
                 </p>
                 <p className="text-theme-muted leading-relaxed">
                   Currently developing HAUL, a delivery roguelike prototype combining physics-based gameplay 
-                  with procedural systems. I'm passionate about creating polished, engaging player experiences 
+                  with procedural systems. Prototype shown was created with assistance of AI tools to accelerate
+                  development. I'm passionate about creating polished, engaging player experiences 
                   and solving complex technical challenges.
                 </p>
               </div>
