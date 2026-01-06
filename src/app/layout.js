@@ -12,8 +12,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Richard Daskas - Full-Stack Web Developer",
-  description: "Portfolio of Richard Daskas - Full-Stack Web Developer specializing in React, Node.js, and modern web technologies",
+  title: "Richard Daskas - Unity Developer & Systems Designer",
+  description: "Unity game developer with 10+ years of C# experience. Shipped Resonant Blade on Steam. Specializing in gameplay systems, physics, and AI.",
 };
 
 export default function RootLayout({ children }) {
