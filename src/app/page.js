@@ -184,8 +184,7 @@ export default function Home() {
                 </p>
                 <p className="text-theme-muted leading-relaxed">
                   Currently developing HAUL, a delivery roguelike prototype combining physics-based gameplay 
-                  with procedural systems. Prototype shown was created with assistance of AI tools to accelerate
-                  development. I'm passionate about creating polished, engaging player experiences 
+                  with procedural systems. I'm passionate about creating polished, engaging player experiences 
                   and solving complex technical challenges.
                 </p>
               </div>
@@ -347,7 +346,8 @@ export default function Home() {
                           Delivery roguelike combining Art of Rally-inspired vehicle physics with Vampire Survivors 
                           gameplay loop. Implemented custom cargo physics with stacking mechanics, procedural terrain 
                           generation, enemy AI with theft behaviors, auto-targeting turret systems, and dynamic camera 
-                          following.
+                          following. Created in two weeks with the assistance of AI tools to accelerate
+                          development.
                         </p>
                         <ul className="mt-2 flex flex-wrap" aria-label="Technologies used">
                           <li className="mr-1.5 mt-2">
@@ -360,7 +360,7 @@ export default function Home() {
                             <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">3D Physics</div>
                           </li>
                           <li className="mr-1.5 mt-2">
-                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">Procedural Generation</div>
+                            <div className="flex items-center rounded-full bg-theme-accent px-3 py-1 text-xs font-medium leading-5 text-theme-accent">AI Tools</div>
                           </li>
                         </ul>
                       </div>
