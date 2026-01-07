@@ -1,0 +1,13 @@
+{
+  "headers": [
+    {
+      "source": "/cascadium/Build/(.*)\\.br",
+      "headers": [
+        {
+          "key": "Content-Encoding",
+          "value": "br"
+        }
+      ]
+    }
+  ]
+}
